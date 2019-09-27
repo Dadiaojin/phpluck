@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>抽奖转盘</title>
+  <style>
+  *{
+    margin:0;
+    padding:0;
+    list-style: none;
+  }
+    .big{
+      width: 50em;
+    height: 80%;
+      margin:100px auto;
+    }
+    .big>div{
+      width: 4em;
+    height: 4em;
+    font-size: 4em;
+    background: pink;
+    float: left;
+    text-align: center;
+    border: solid;
+	line-height: 4em;
+    }
+    .big>div:nth-of-type(5){
+      background: yellow;
+      cursor: pointer;
+	  font-size: 4em;
+    }
+	
+	#incj{
+		background: yellow;
+      cursor: pointer;
+	  font-size: 4em;
+		}
+                
+       #endcj{
+		background: yellow;
+      cursor: pointer;
+	  font-size: 4em;
+		}         
+                
+    #act{
+      background: red;
+    }
+  </style>
+</head>
+<body>
+<div class="big">
+  <div class="small" id="act" >劳斯莱斯15元代金券</div>
+  <div class="small" >兰博基尼15元代金券</div>
+  <div class="small" style="font-size: 4em;line-height: 1.2em;">劳斯莱斯5元代金券</div>
+  <div class="small" style="font-size: 4em;line-height: 1.2em;" >兰博基尼5元代金券</div>
+  <div id="cj">点击抽奖</div>
+  <div id="incj" style="display:none">抽奖中</div>
+  <div id="endcj" style="display:none">抽奖结束</div>
+  <div class="small" style="font-size: 4em;line-height: 1.2em;">法拉利5元代金券</div>
+  <div class="small" style="font-size: 4em;line-height: 1.2em;">保时捷1元代金券</div>
+  <div class="small" style="font-size: 4em;line-height: 1.2em;">五菱宏光1毛代金券</div>
+  <div class="small" style="font-size: 4em;line-height: 1.2em;">谢谢抽奖！</div>
+</div>
+<p id="p"></p>
+<script>
+
+  var arrDiv=document.getElementsByClassName("small");
+  var oCj=document.getElementById("cj");
+  var incj=document.getElementById("incj");
+  var endcj=document.getElementById("endcj");
+  var p=document.getElementById("p");
+  var num=0;
+  var quan=0;
+  var shijian=parseInt(Math.random()*100+100);
+  var end_num=2;
+  
+  oCj.onclick=function(){
+    oTime=setInterval(dianji,200);
+	oCj.style.display="none";
+	incj.style.display="block";
+        
+     
+  var ajax = new XMLHttpRequest();
+//步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数,动态的传递参数starName到服务端
+ajax.open('get','./ajax/lucknum.php?cj='+Math.floor(Math.random()*10000));
+//步骤三:发送请求
+ajax.send();
+//步骤四:注册事件 onreadystatechange 状态改变就会调用
+ajax.onreadystatechange = function () {
+   if (ajax.readyState==4 &&ajax.status==200) {
+    //步骤五 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+　　　　console.log(ajax.responseText);//输入相应的内容
+      end_num=ajax.responseText;
+  　　}
+}
+   		 
+		 
+		
+  }
+  function dianji() {
+	  /*顺时针*/
+	switch(num){
+     case 0:
+      num=num+1;
+     break;
+     case 1:
+        num=num+1;
+      break;
+       case 2:
+       num=num+2;
+      break;
+
+      case 4:
+       num=num+3;
+      break;
+	  case 7:
+       num=num-1;
+      break;
+	  case 6:
+       num=num-1;
+      break;
+	 case 5:
+       num=num-2;
+      break;
+     case 3:
+       num=num-3;
+	   quan=quan+1;
+      break;
+default:
+  
+}
+	
+	//*** 01247653
+
+	//***
+    /*if (num>arrDiv.length-1){
+      num=0;
+	  quan=quan+1;
+    }*/
+	
+    for(j=0;j<arrDiv.length;j++){
+      arrDiv[j].id="";
+    }
+    arrDiv[num].id="act";
+	//显示随机数
+	
+	//测试1
+	
+    if(num==end_num && quan==2){
+    setTimeout(tingzhi,shijian);
+	incj.style.display="none";
+	endcj.style.display="block";
+	}
+    function tingzhi() {
+      clearInterval(oTime)
+    }
+   }
+   
+</script>
+</body>
+</html>
